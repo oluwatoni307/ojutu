@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ojutu – Product Development Agency</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=Shrikhand&family=Space+Grotesk:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* --- 1. RESET & VARIABLES --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #00A14B;
+      --primary-dark: #008C40;
+      --dark-bg: #1A1A1A;
+      --darker-bg: #121212;
+      --card-bg: #1E1E1E;
+      --text-primary: #FFFFFF;
+      --text-secondary: #D4D4D4;
+      --text-muted: #888;
+      --border-color: #333;
+      --glow-shadow: 0 20px 40px rgba(0, 161, 75, 0.15);
+      --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* --- 2. NAVIGATION --- */
+    .nav {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: calc(100% - 40px);
+      max-width: 1080px;
+      height: 64px;
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-logo {
+      font-family: 'Shrikhand';
+      font-size: 28px;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      z-index: 1001;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    /* --- 3. MOBILE MENU --- */
+    @media (max-width: 968px) {
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: var(--darker-bg);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        transform: translateY(-100%);
+        transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+        z-index: 1000;
+        padding: 0;
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+      }
+
+      .nav-menu a {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 32px;
+        color: #fff;
+      }
+
+      .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+      }
+
+      .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+      }
+    }
+
+    /* --- 4. HERO SECTION --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      background: #000;
+    }
+
+    .hero-bg-slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    .hero-bg-slide.active {
+      opacity: 1;
+    }
+
+    .hero-bg-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 6% 60px 6%;
+      text-align: left;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      color: #fff;
+      max-width: 650px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: var(--primary-color);
+      border-radius: 4px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 161, 75, 0.3);
+    }
+
+    .cta-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 161, 75, 0.5);
+    }
+
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+
+    /* --- 5. ANIMATIONS --- */
+    .reveal-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reveal-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--darker-bg);
+      transform: scaleX(1);
+      transform-origin: right;
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 2;
+    }
+
+    .reveal-wrapper.revealed::after {
+      transform: scaleX(0);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-up.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal-stagger {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .scroll-reveal-stagger.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+    /* --- 6. SECTIONS --- */
+    section {
+      padding: 120px 6%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      margin-bottom: 24px;
+    }
+
+    p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      max-width: 600px;
+    }
+
+    /* --- ABOUT --- */
+    .split-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .visual-container {
+      height: 450px;
+      border-radius: 8px;
+    }
+
+    .visual-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --- MISSION --- */
+    .mission-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .based-box {
+      background: #151515;
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .based-intro {
+      margin-bottom: 24px;
+      color: #999;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .based-items {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .b-item {
+      text-align: center;
+      padding: 15px 5px;
+      background: rgba(0, 161, 75, 0.05);
+      border: 1px solid rgba(0, 161, 75, 0.1);
+      border-radius: 8px;
+    }
+
+    .b-let {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary-color);
+      font-family: 'Space Grotesk';
+    }
+
+    .b-word {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    /* --- CAPABILITIES --- */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .cap-card {
+      background: var(--card-bg);
+      padding: 40px 32px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .cap-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-5px);
+      box-shadow: var(--glow-shadow);
+    }
+
+    .cap-card i.main-icon {
+      font-size: 32px;
+      color: var(--primary-color);
+      margin-bottom: 24px;
+    }
+
+    .cap-features {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .cap-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #999;
+    }
+
+    .cap-features li i {
+      font-size: 10px;
+      color: var(--primary-color);
+    }
+
+    /* --- WORK GRID --- */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .work-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .work-item:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--glow-shadow);
+      border-color: rgba(0, 161, 75, 0.3);
+    }
+
+    .work-image {
+      height: 320px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .work-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .work-item:hover .work-image img {
+      transform: scale(1.05);
+    }
+
+    .work-content {
+      padding: 24px;
+      background: var(--card-bg);
+    }
+
+    .work-content h3 {
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .work-item:hover .work-content h3 {
+      color: var(--primary-color);
+    }
+
+    .work-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+
+    /* --- NEW PROCESS SECTION STYLES (Tight Spine Grid) --- */
+    #process {
+      padding: 60px 5%;
+      /* Tight padding */
+      background: var(--dark-bg);
+      overflow: hidden;
+    }
+
+    #process h2 {
+      text-align: center;
+      margin-bottom: 50px;
+      color: var(--text-primary);
+    }
+
+    .process-timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* The Center Spine */
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(-50%);
+    }
+
+    .process-step {
+      position: relative;
+      width: 50%;
+      margin-bottom: 15px;
+      /* Minimal row gap */
+      padding: 0 30px;
+      box-sizing: border-box;
+    }
+
+    /* Left Side Items */
+    .process-step:nth-child(odd) {
+      left: 0;
+      text-align: left;
+    }
+
+    /* Right Side Items (Pulled Up) */
+    .process-step:nth-child(even) {
+      left: 50%;
+      text-align: left;
+      margin-top: -140px;
+      /* Aggressive pull-up for tight fit */
+    }
+
+    .process-content {
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: 20px;
+      position: relative;
+      transition: var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .process-step:hover .process-content {
+      transform: translateY(-5px);
+      border-color: var(--primary-color);
+      box-shadow: 0 10px 30px rgba(0, 161, 75, 0.15);
+    }
+
+    .process-number {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--dark-bg);
+      background: var(--primary-color);
+      padding: 6px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .process-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .process-content p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* --- CONTACT --- */
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    .c-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+      background: var(--card-bg);
+      text-decoration: none;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .c-link:hover {
+      border-color: var(--primary-color);
+      background: #222;
+      box-shadow: var(--glow-shadow);
+      transform: translateY(-2px);
+    }
+
+    .c-link span {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .c-link i {
+      color: var(--primary-color);
+      font-size: 20px;
+    }
+
+    /* --- RESPONSIVE ADJUSTMENTS --- */
+    @media (max-width: 900px) {
+      section {
+        text-align: center;
+        padding: 80px 5%;
+      }
+
+      p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .split-grid,
+      .mission-grid,
+      .work-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-content {
+        text-align: center;
+        align-items: center;
+        padding-bottom: 120px;
+      }
+
+      .hero-ctas {
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        max-width: 100%;
+        margin-bottom: 24px;
+      }
+
+      .based-items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .b-item {
+        width: 30%;
+        flex-grow: 1;
+        min-width: 80px;
+      }
+
+      .work-image {
+        height: 250px;
+      }
+
+      .cap-features {
+        justify-content: center;
+      }
+
+      .c-link {
+        text-align: left;
+      }
+    }
+
+    /* Process Mobile Responsive */
+    @media (max-width: 768px) {
+      .process-timeline::before {
+        left: 0;
+        width: 2px;
+      }
+
+      .process-step {
+        width: 100%;
+        left: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 20px;
+        padding-left: 25px;
+        padding-right: 0;
+        text-align: left;
+        /* Keep left alignment */
+      }
+
+      #process h2 {
+        text-align: center;
+      }
+
+      .process-content {
+        text-align: left;
+        /* Ensure card content stays left aligned */
+      }
+
+      .process-content p {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <a href="#" class="nav-logo">ojutu</a>
+    <ul class="nav-menu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#mission">Mission</a></li>
+      <li><a href="#vision">Vision</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" id="nav-toggle">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-content fade-up">
+      <h1>We make life fun and easier for everyday<br> people.</h1>
+      <div class="hero-ctas">
+        <a href="#contact" class="cta-primary">Start Project</a>
+        <a href="#work" class="cta-secondary">View Work</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="split-grid">
+      <div class="fade-up">
+        <h2>About Us</h2>
+        <p>We are a product development agency. We specialize in designing and developing physical and digital products
+          for startups, companies, and Individuals.</p>
+        <p>Our team combines technical expertise with creative vision. We are not just manufacturers; we are creators
+          committed to delivering solutions that solve real problems.</p>
+      </div>
+      <div class="visual-container reveal-wrapper">
+        <img src="about.jpg" alt="About Ojutu"
+          onerror="this.src='https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80'" />
+      </div>
+    </div>
+  </section>
+
+  <section id="mission">
+    <div class="mission-grid">
+      <div class="fade-up">
+        <h2>Our Mission</h2>
+        <p>To constantly develop and deliver human-centered and environmentally friendly solutions.</p>
+        <p>We strip away complexity to reveal the essential.</p>
+      </div>
+      <div class="based-box fade-up">
+        <h3>Design Principles</h3>
+        <p class="based-intro">
+          At Ojutu, we embrace a design philosophy known as BASED. We believe that for any solution to be successful, it
+          must embody these principles:
+        </p>
+        <div class="based-items">
+          <div class="b-item"><span class="b-let">B</span><span class="b-word">Beautiful</span></div>
+          <div class="b-item"><span class="b-let">A</span><span class="b-word">Accessible</span></div>
+          <div class="b-item"><span class="b-let">S</span><span class="b-word">Safe</span></div>
+          <div class="b-item"><span class="b-let">E</span><span class="b-word">Effective</span></div>
+          <div class="b-item"><span class="b-let">D</span><span class="b-word">Durable</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision">
+    <div class="split-grid">
+      <div class="visual-container reveal-wrapper">
+        <img src="vision.jpg" alt="Our Vision"
+          onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'" />
+      </div>
+      <div class="fade-up">
+        <h2>Our Vision</h2>
+        <p>We envision a world where life is fun and easier for everyday people.</p>
+        <p>We are committed to making this reality by creating products and services that simplify daily tasks and bring
+          joy to those who use them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities">
+    <div class="fade-up" style="text-align: center;">
+      <h2>Our Capabilities</h2>
+      <p style="margin: 0 auto;">From concept to reality, we handle it all.</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-card fade-up">
+        <i class="fas fa-cube main-icon"></i>
+        <h3>Physical Design</h3>
+        <p>We design new products and optimize existing ones. We ensure every physical object we create is ergonomic,
+          functional, and market-ready.</p>
+        <ul class="cap-features">
+          <li><i class="fas fa-circle"></i> Industrial Design</li>
+          <li><i class="fas fa-circle"></i> Prototyping</li>
+        </ul>
+      </div>
+
+      <div class="cap-card fade-up">
+        <i class="fas fa-code main-icon"></i>
+        <h3>Digital Development</h3>
+        <p>We develop websites, apps, and digital platforms. We focus on clean code, seamless user experience, and
+          scalability.</p>
+        <ul class="cap-features">
+          <li><i class="fas fa-circle"></i> Web & Mobile</li>
+          <li><i class="fas fa-circle"></i> UI/UX Design</li>
+        </ul>
+      </div>
+
+      <div class="cap-card fade-up">
+        <i class="fas fa-boxes-stacked main-icon"></i>
+        <h3>Manufacturing</h3>
+        <p>We help in sourcing manufacturers, materials, and suppliers. We ensure competitive pricing and timely
+          products.</p>
+        <ul class="cap-features">
+          <li><i class="fas fa-circle"></i> Sourcing</li>
+          <li><i class="fas fa-circle"></i> Quality Control</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2 style="text-align: center;">Our Work</h2>
+    <div class="work-grid">
+
+      <div class="work-item reveal-wrapper">
+        <div class="work-image">
+          <img src="work_1.jpg" alt="Innovative Consumer Product"
+            onerror="this.src='https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&q=80'" />
+        </div>
+        <div class="work-content">
+          <h3>Innovative Consumer Product</h3>
+          <p>A complete product development cycle from concept sketches to market-ready prototype.</p>
+        </div>
+      </div>
+
+      <div class="work-item reveal-wrapper">
+        <div class="work-image">
+          <img src="work_2.jpg" alt="E-Commerce Platform"
+            onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80'" />
+        </div>
+        <div class="work-content">
+          <h3>E-Commerce Platform</h3>
+          <p>Full-stack web application with seamless user experience and payment integration.</p>
+        </div>
+      </div>
+
+      <div class="work-item reveal-wrapper">
+        <div class="work-image">
+          <img src="work_3.jpg" alt="Mobile Health App"
+            onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80'" />
+        </div>
+        <div class="work-content">
+          <h3>Mobile Health App</h3>
+          <p>iOS and Android application development with intuitive UI/UX and real-time data sync.</p>
+        </div>
+      </div>
+
+      <div class="work-item reveal-wrapper">
+        <div class="work-image">
+          <img src="4.jpg" alt="IoT Smart Device"
+            onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80'" />
+        </div>
+        <div class="work-content">
+          <h3>IoT Smart Device</h3>
+          <p>Connected device design with custom manufacturing and app integration.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="process" class="process">
+    <h2 class="scroll-reveal">Our Process</h2>
+    <div class="process-timeline">
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 1</div>
+          <h3>Vision</h3>
+          <p>This is the foundation of our design process. It involves defining the overall goals and objectives for the
+            project. We consider the bigger picture and set a clear direction to guide our work.</p>
+        </div>
+      </div>
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 2</div>
+          <h3>Research</h3>
+          <p>We conduct thorough research to gather valuable insights. This includes studying relevant data, trends, and
+            technologies that can inform our design decisions to ensure our solutions are innovative.</p>
+        </div>
+      </div>
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 3</div>
+          <h3>Analysis</h3>
+          <p>We analyze user behaviors, demographics, and pain points while examining the market landscape to identify
+            opportunities and challenges. This helps us create designs that are user-centric.</p>
+        </div>
+      </div>
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 4</div>
+          <h3>Ideation</h3>
+          <p>In this creative phase, we brainstorm and generate a wide range of ideas. We encourage innovative thinking
+            and explore multiple design concepts, thinking outside the box to develop unique solutions.</p>
+        </div>
+      </div>
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 5</div>
+          <h3>Prototyping</h3>
+          <p>We bring our ideas to life through prototypes ranging from sketches to active models. Prototyping allows us
+            to test and refine our designs iteratively, gathering feedback to make necessary improvements.</p>
+        </div>
+      </div>
+
+      <div class="process-step scroll-reveal-stagger">
+        <div class="process-content">
+          <div class="process-number">Step 6</div>
+          <h3>Validation</h3>
+          <p>In the final stage, we validate our designs through rigorous testing, usability assessments, and
+            performance evaluations to ensure they meet the project's goals and are ready for implementation.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" style="border-bottom: none;">
+    <h2 style="text-align: center;">Let's Build It</h2>
+    <div class="contact-links fade-up">
+      <a href="mailto:info@ojutu.com" class="c-link">
+        <span>info@ojutu.com</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+      <a href="https://wa.me/2348000000000" class="c-link">
+        <span>Chat on WhatsApp</span>
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="tel:+2348000000000" class="c-link">
+        <span>+234 (XXX) XXX-XXXX</span>
+        <i class="fas fa-phone"></i>
+      </a>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 40px; color: #666; font-size: 14px; border-top: 1px solid #222;">
+    &copy; 2024 Ojutu. Making life fun and easier.
+  </footer>
+
+  <script>
+    // --- 1. HERO SLIDESHOW LOGIC ---
+    const heroBg = document.getElementById('heroBg');
+    const totalImages = 10;
+    let currentSlide = 0;
+
+    for (let i = 1; i <= totalImages; i++) {
+      const slide = document.createElement('div');
+      slide.className = `hero-bg-slide ${i === 1 ? 'active' : ''}`;
+      const img = document.createElement('img');
+      img.src = `${i}.jpg`;
+      img.onerror = function () { };
+      slide.appendChild(img);
+      heroBg.appendChild(slide);
+    }
+
+    setInterval(() => {
+      const slides = document.querySelectorAll('.hero-bg-slide');
+      if (slides.length > 0) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }
+    }, 4000);
+
+    // --- 2. GENERAL ANIMATION OBSERVER (Fade Up) ---
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-up, .reveal-wrapper, .scroll-reveal').forEach(el => observer.observe(el));
+
+    // --- 3. SPECIFIC PROCESS STAGGER OBSERVER ---
+    const timeline = document.querySelector('.process-timeline');
+    const staggerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const items = timeline.querySelectorAll('.scroll-reveal-stagger');
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('revealed');
+            }, index * 150); // 150ms staggered delay
+          });
+          staggerObserver.unobserve(timeline);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    if (timeline) staggerObserver.observe(timeline);
+
+    // --- 4. MOBILE NAV LOGIC ---
+    const toggle = document.getElementById('nav-toggle');
+    const menu = document.querySelector('.nav-menu');
+    const links = document.querySelectorAll('.nav-menu a');
+
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+      });
+    });
+
+    // --- 5. AGENCY CURSOR EFFECT ---
+    const btns = document.querySelectorAll('.cta-primary, .cta-secondary');
+    if (window.matchMedia("(hover: hover)").matches) {
+      btns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          requestAnimationFrame(() => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+          });
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0,0)';
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
