@@ -383,15 +383,35 @@
       align-items: center;
     }
 
-    .visual-container {
-      height: 450px;
-      border-radius: 8px;
+    /* New, final CSS to style the integrated caption (high contrast, left-aligned) */
+    .visual-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 30px;
+
+      background: rgba(18, 18, 18, 0.85);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+
+      color: var(--text-primary);
+      z-index: 5;
+      /* *** KEY IMPROVEMENT: Changed from right to left *** */
+      text-align: left;
     }
 
-    .visual-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .visual-caption h3 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .visual-caption p {
+      margin: 0;
+      font-size: 16px;
+      color: var(--text-secondary);
     }
 
     /* --- MISSION --- */
@@ -499,8 +519,10 @@
     .work-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      /* Keep 2 columns */
       gap: 40px;
-      max-width: 1200px;
+      max-width: 950px;
+      /* UPDATED: Reduced from 1200px to make cards narrower */
       margin: 40px auto 0;
     }
 
@@ -520,7 +542,7 @@
     }
 
     .work-image {
-      height: 320px;
+      height: 420px;
       width: 100%;
       overflow: hidden;
     }
@@ -826,8 +848,12 @@
           that make a real difference in people's lives..</p>
       </div>
       <div class="visual-container reveal-wrapper">
-        <img src="about.jpg" alt="About Ojutu"
+        <img src="founder.jpg" alt="Founder and CEO of Ojutu"
           onerror="this.src='https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80'" />
+        <div class="visual-caption fade-up">
+          <h3>Seun Alonge</h3>
+          <p>CEO, Ojutu</p>
+        </div>
       </div>
     </div>
   </section>
