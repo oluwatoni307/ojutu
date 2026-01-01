@@ -383,6 +383,24 @@
       align-items: center;
     }
 
+    /* Ensure visual blocks fill their grid cell and images cover
+       Use the actual image aspect ratio (480:600 -> 4/5) so images scale correctly */
+    .visual-container {
+      width: 100%;
+      aspect-ratio: 384 / 480;
+      max-height: 600px;
+      overflow: hidden;
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .visual-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     /* New, final CSS to style the integrated caption (high contrast, left-aligned) */
     .visual-caption {
       position: absolute;
@@ -765,6 +783,10 @@
         height: 250px;
       }
 
+      .visual-container {
+        max-height: 420px;
+      }
+
       .cap-features {
         justify-content: center;
       }
@@ -991,8 +1013,8 @@
             onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80'" />
         </div>
         <div class="work-content">
-          <h3>IoT Smart Device</h3>
-          <p>Connected device design with custom manufacturing and app integration.</p>
+          <h3>Trendaz</h3>
+          <p>A brand created for youths by youth, a range of products that are fresh, bold and energetic</p>
         </div>
       </div>
 
