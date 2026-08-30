@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
 
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +8,7 @@
   <title>Ojutu – Product Development Agency</title>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=Shrikhand&family=Space+Grotesk:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=Shrikhand&family=Space+Grotesk:wght@400;500;600&family=Bodoni+Moda:wght@600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -30,7 +31,7 @@
       --text-muted: #888;
       --border-color: #333;
       --glow-shadow: 0 20px 40px rgba(0, 161, 75, 0.15);
-      --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     html {
@@ -49,7 +50,12 @@
     }
 
     h1,
-    h2,
+    h2 {
+      font-family: 'Bodoni Moda', serif;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
     h3,
     h4 {
       font-family: 'Space Grotesk', sans-serif;
@@ -105,7 +111,7 @@
       font-size: 14px;
       font-weight: 500;
       position: relative;
-      transition: color 0.2s ease;
+      transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .nav-menu a:hover {
@@ -128,7 +134,7 @@
       width: 100%;
       height: 2px;
       background: var(--text-primary);
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* --- 3. MOBILE MENU --- */
@@ -149,7 +155,7 @@
         align-items: center;
         gap: 40px;
         transform: translateY(-100%);
-        transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 1000;
         padding: 0;
       }
@@ -190,10 +196,10 @@
 
     .hero-bg {
       position: absolute;
-      top: 0;
+      top: -30%;
       left: 0;
       right: 0;
-      bottom: 0;
+      height: 130%;
       z-index: 1;
       background: #000;
     }
@@ -203,7 +209,7 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      transition: opacity 1.5s ease;
+      transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .hero-bg-slide.active {
@@ -247,7 +253,55 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    /* --- 5. ANIMATIONS --- */
+    /* --- 5. ANIMATIONS ---
+       Native CSS scroll-driven animations. No JavaScript, no cached scroll
+       positions — the browser's compositor drives these off live scroll/view
+       position every frame, so there's nothing that can go stale or get
+       stuck. Everything here fails safe: unsupported browsers just see the
+       final, fully-visible state via the @supports fallback below. */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary-color);
+      transform: scaleX(0);
+      transform-origin: left;
+      z-index: 2000;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 22px;
+      height: 34px;
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      border-radius: 12px;
+    }
+
+    .scroll-cue::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      width: 3px;
+      height: 6px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transform: translateX(-50%);
+      animation: cueDrop 1.6s ease infinite;
+    }
+
+    @keyframes cueDrop {
+      0% { opacity: 1; top: 6px; }
+      70% { opacity: 0; top: 18px; }
+      100% { opacity: 0; top: 18px; }
+    }
+
     .reveal-wrapper {
       position: relative;
       overflow: hidden;
@@ -261,49 +315,67 @@
       width: 100%;
       height: 100%;
       background: var(--darker-bg);
-      transform: scaleX(1);
+      transform: scaleX(0);
       transform-origin: right;
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
       z-index: 2;
+      pointer-events: none;
     }
 
-    .reveal-wrapper.revealed::after {
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-cue::before { animation: none; opacity: 1; }
+    }
+
+    /* Progressive enhancement: <html> starts with class "no-js" and an
+       inline script (right after <body>) swaps it to "js" the instant JS
+       runs. Hidden-by-default states only apply under .js — so a visitor
+       with JS disabled, or if the script ever fails, simply sees everything
+       fully visible. Nothing can get permanently stuck, because nothing is
+       ever hidden unless JS is confirmed running to reveal it again. */
+    .js .fade-up,
+    .js .scroll-reveal,
+    .js .cap-grid > .cap-card,
+    .js .work-grid > .work-item,
+    .js .team-grid > .team-card,
+    .js .core-values-grid > .value-item,
+    .js .based-items > .b-item,
+    .js .process-timeline > .process-step {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .js .fade-up.is-visible,
+    .js .scroll-reveal.is-visible,
+    .js .cap-grid > .cap-card.is-visible,
+    .js .work-grid > .work-item.is-visible,
+    .js .team-grid > .team-card.is-visible,
+    .js .core-values-grid > .value-item.is-visible,
+    .js .based-items > .b-item.is-visible,
+    .js .process-timeline > .process-step.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .js .reveal-wrapper::after {
+      transform: scaleX(1);
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .js .reveal-wrapper.is-visible::after {
       transform: scaleX(0);
     }
 
-    .fade-up {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+    @media (prefers-reduced-motion: reduce) {
+      .js .fade-up, .js .scroll-reveal,
+      .js .cap-grid > .cap-card, .js .work-grid > .work-item,
+      .js .team-grid > .team-card, .js .core-values-grid > .value-item,
+      .js .based-items > .b-item, .js .process-timeline > .process-step,
+      .js .reveal-wrapper::after {
+        transition-duration: 0.3s;
+        transform: none;
+      }
     }
-
-    .fade-up.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .scroll-reveal {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease;
-    }
-
-    .scroll-reveal.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .scroll-reveal-stagger {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease;
-    }
-
-    .scroll-reveal-stagger.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
 
     /* --- 6. SECTIONS --- */
     section {
@@ -464,7 +536,7 @@
       padding: 40px 32px;
       border-radius: 8px;
       border: 1px solid transparent;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .cap-card:hover {
@@ -567,7 +639,7 @@
       max-height: 0;
       overflow: hidden;
       margin-bottom: 0;
-      transition: max-height 0.4s ease, margin 0.4s ease;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), margin 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .team-card.active .team-bio {
@@ -587,7 +659,7 @@
 
     .team-toggle i {
       font-size: 10px;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .team-card.active .team-toggle i {
@@ -608,7 +680,7 @@
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       border: 1px solid transparent;
     }
 
@@ -628,7 +700,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .work-item:hover .work-image img {
@@ -644,7 +716,7 @@
       font-size: 22px;
       color: #fff;
       margin-bottom: 8px;
-      transition: color 0.3s ease;
+      transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .work-item:hover .work-content h3 {
@@ -764,7 +836,7 @@
       color: #fff;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .c-link:hover {
@@ -878,6 +950,8 @@
 
 <body>
 
+  <div class="scroll-progress"></div>
+
   <nav class="nav">
     <a href="#" class="nav-logo">ojutu</a>
     <ul class="nav-menu">
@@ -895,17 +969,18 @@
   <section class="hero">
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-content fade-up">
-      <h1>We make life fun and easier for everyday<br> people.</h1>
+      <h1>We make spaces safer, easier, welcoming and fun for everyday people.</h1>
     </div>
+    <div class="scroll-cue"></div>
   </section>
 
   <section id="about">
     <div class="split-grid">
       <div class="fade-up">
         <h2>About Us</h2>
-        <p>We are a dynamic company that specializes in property services and product development. Our products and
-          services deliver innovative, reliable, safe and value driven solutions to individuals, businesses, and
-          organizations.</p>
+        <p>We are a dynamic company specializing in property services and product development. Our solutions
+          deliver innovative, reliable, safe, and value-driven results for individual homes, businesses, and
+          organizational spaces.</p>
       </div>
       <div class="visual-container reveal-wrapper">
         <img src="founder.jpg" alt="Founder of Ojutu"
@@ -952,7 +1027,7 @@
       </div>
       <div class="fade-up">
         <h2>Our Vision</h2>
-        <p>We make life easier, safer and fun for everyday people.</p>
+        <p>We make spaces safer, easier, welcoming and fun for everyday people.</p>
       </div>
     </div>
   </section>
@@ -967,14 +1042,14 @@
       <div class="cap-card fade-up">
         <i class="fas fa-house-chimney-window main-icon"></i>
         <h3>Property Services</h3>
-        <p>Our Property Services division provides solutions in the areas of property management, maintenance,
-          renovation, safety and furniture production. We are committed to helping our clients maximize the value,
+        <p>Our Property Services division provides solutions in the areas of maintenance, renovation, safety,
+          landscaping and space planning. We are committed to helping our clients maximize the value,
           functionality, safety and long-term potential of their properties.</p>
         <ul class="cap-features">
-          <li><i class="fas fa-check"></i> Property management</li>
           <li><i class="fas fa-check"></i> Maintenance & renovation</li>
           <li><i class="fas fa-check"></i> Safety</li>
-          <li><i class="fas fa-check"></i> Furniture production</li>
+          <li><i class="fas fa-check"></i> Landscaping</li>
+          <li><i class="fas fa-check"></i> Space planning</li>
         </ul>
       </div>
 
@@ -982,11 +1057,11 @@
         <i class="fas fa-boxes-stacked main-icon"></i>
         <h3>Product Development</h3>
         <p>Our Product Development team specialises in identifying, developing and delivering high demand, durable and
-          non durable consumer goods, with a focus on lifestyle products.</p>
+          non durable consumer goods, with a focus on home products.</p>
         <ul class="cap-features">
           <li><i class="fas fa-check"></i> Consumer goods development</li>
           <li><i class="fas fa-check"></i> Durable & non-durable products</li>
-          <li><i class="fas fa-check"></i> Lifestyle-focused design</li>
+          <li><i class="fas fa-check"></i> Home-focused design</li>
           <li><i class="fas fa-check"></i> Market-demand driven</li>
         </ul>
       </div>
@@ -1015,7 +1090,7 @@
     <div class="team-grid">
 
       <div class="team-card fade-up" tabindex="0" role="button" aria-expanded="false">
-        <div class="team-photo">
+        <div class="team-photo reveal-wrapper">
           <img src="sandra.jpeg" alt="Adeleye Sandra Anjolaoluwa"
             onerror="this.src='https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80'" />
         </div>
@@ -1032,7 +1107,7 @@
       </div>
 
       <div class="team-card fade-up" tabindex="0" role="button" aria-expanded="false">
-        <div class="team-photo">
+        <div class="team-photo reveal-wrapper">
           <img src="chiagozie.jpeg" alt="Chiagozie Christopher Chime"
             onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80'" />
         </div>
@@ -1049,7 +1124,7 @@
       </div>
 
       <div class="team-card fade-up" tabindex="0" role="button" aria-expanded="false">
-        <div class="team-photo">
+        <div class="team-photo reveal-wrapper">
           <img src="praise.jpeg" alt="Praise Ayenigba"
             onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80'" />
         </div>
@@ -1065,9 +1140,9 @@
       </div>
 
       <div class="team-card fade-up" tabindex="0" role="button" aria-expanded="false">
-        <div class="team-photo">
-          <img src="https://ui-avatars.com/api/?name=Oluwatoni+Emmanuel&background=00A14B&color=fff&size=400&bold=true"
-            alt="Oluwatoni Emmanuel" />
+        <div class="team-photo reveal-wrapper">
+          <img src="oluwatoni.jpeg" alt="Oluwatoni Emmanuel"
+            onerror="this.src='https://ui-avatars.com/api/?name=Oluwatoni+Emmanuel&background=00A14B&color=fff&size=400&bold=true'" />
         </div>
         <div class="team-info">
           <h3>Oluwatoni Emmanuel</h3>
@@ -1087,8 +1162,8 @@
     <h2 style="text-align: center;">Our Work</h2>
     <div class="work-grid">
 
-      <div class="work-item reveal-wrapper">
-        <div class="work-image">
+      <div class="work-item">
+        <div class="work-image reveal-wrapper">
           <img src="work_1.jpg" alt="Innovative Consumer Product"
             onerror="this.src='https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&q=80'" />
         </div>
@@ -1098,8 +1173,8 @@
         </div>
       </div>
 
-      <div class="work-item reveal-wrapper">
-        <div class="work-image">
+      <div class="work-item">
+        <div class="work-image reveal-wrapper">
           <img src="work_2.jpg" alt="E-Commerce Platform"
             onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80'" />
         </div>
@@ -1109,8 +1184,8 @@
         </div>
       </div>
 
-      <div class="work-item reveal-wrapper">
-        <div class="work-image">
+      <div class="work-item">
+        <div class="work-image reveal-wrapper">
           <img src="work_3.jpg" alt="Mobile Health App"
             onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80'" />
         </div>
@@ -1120,8 +1195,8 @@
         </div>
       </div>
 
-      <div class="work-item reveal-wrapper">
-        <div class="work-image">
+      <div class="work-item">
+        <div class="work-image reveal-wrapper">
           <img src="work_4.JPG" alt="IoT Smart Device"
             onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80'" />
         </div>
@@ -1241,34 +1316,91 @@
       }
     }, 4000);
 
-    // --- 2. GENERAL ANIMATION OBSERVER (Fade Up) ---
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-        }
-      });
-    }, { threshold: 0.15 });
+    // --- 2. MOTION SYSTEM ---
+    // Deliberately boring technology: IntersectionObserver for one-time
+    // reveals, a throttled scroll listener for the continuous hero effects.
+    // Both have been universally supported for years — nothing here is
+    // gambling on newer CSS features that may not actually be reliable yet.
+    (function () {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    document.querySelectorAll('.fade-up, .reveal-wrapper, .scroll-reveal').forEach(el => observer.observe(el));
+      // --- One-time entrance reveals ---
+      if ('IntersectionObserver' in window) {
+        const revealSelectors = '.fade-up, .scroll-reveal, .reveal-wrapper, ' +
+          '.cap-grid > .cap-card, .work-grid > .work-item, .team-grid > .team-card, ' +
+          '.core-values-grid > .value-item, .based-items > .b-item, .process-timeline > .process-step';
 
-    // --- 3. SPECIFIC PROCESS STAGGER OBSERVER ---
-    const timeline = document.querySelector('.process-timeline');
-    const staggerObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const items = timeline.querySelectorAll('.scroll-reveal-stagger');
-          items.forEach((item, index) => {
-            setTimeout(() => {
-              item.classList.add('revealed');
-            }, index * 150);
+        // Stagger siblings within a row by offsetting each one's own
+        // transition-delay slightly, so a group settles in as one beat
+        const staggerGroups = ['.cap-grid > .cap-card', '.work-grid > .work-item',
+          '.team-grid > .team-card', '.core-values-grid > .value-item',
+          '.based-items > .b-item', '.process-timeline > .process-step'];
+        staggerGroups.forEach(sel => {
+          document.querySelectorAll(sel).forEach((el, i) => {
+            el.style.transitionDelay = (i * 80) + 'ms';
           });
-          staggerObserver.unobserve(timeline);
-        }
-      });
-    }, { threshold: 0.1 });
+        });
 
-    if (timeline) staggerObserver.observe(timeline);
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+
+        document.querySelectorAll(revealSelectors).forEach(el => observer.observe(el));
+      } else {
+        // No IntersectionObserver support at all — bail out of the "js"
+        // hidden states entirely so content just stays visible.
+        document.documentElement.classList.remove('js');
+      }
+
+      // --- Continuous hero effects (parallax, recede, progress, cue) ---
+      if (reduceMotion) return;
+
+      const hero = document.querySelector('.hero');
+      const heroBg = document.querySelector('.hero-bg');
+      const heroContent = document.querySelector('.hero-content');
+      const scrollCue = document.querySelector('.scroll-cue');
+      const progress = document.querySelector('.scroll-progress');
+      if (!hero) return;
+
+      let ticking = false;
+
+      function update() {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        if (progress && docHeight > 0) {
+          progress.style.transform = `scaleX(${Math.min(scrollY / docHeight, 1)})`;
+        }
+
+        const heroHeight = hero.offsetHeight;
+        const heroProgress = Math.min(Math.max(scrollY / heroHeight, 0), 1);
+
+        if (heroBg) heroBg.style.transform = `translateY(${heroProgress * 20}%)`;
+        if (heroContent) {
+          heroContent.style.opacity = String(1 - heroProgress * 0.9);
+          heroContent.style.transform =
+            `translateY(${heroProgress * -14}%) scale(${1 - heroProgress * 0.04})`;
+        }
+        if (scrollCue) {
+          scrollCue.style.opacity = String(Math.max(1 - scrollY / 150, 0));
+        }
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      update(); // set correct initial state on load
+    })();
 
     // --- 4. MOBILE NAV LOGIC ---
     const toggle = document.getElementById('nav-toggle');
