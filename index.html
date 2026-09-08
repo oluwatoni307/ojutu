@@ -1324,18 +1324,18 @@
   <script>
     // --- 1. HERO SLIDESHOW LOGIC ---
     const heroBg = document.getElementById('heroBg');
-    const totalImages = 10;
+    const heroImages = Array.from({ length: 8 }, (_, index) => index + 3);
     let currentSlide = 0;
 
-    for (let i = 1; i <= totalImages; i++) {
+    heroImages.forEach((imageNumber, index) => {
       const slide = document.createElement('div');
-      slide.className = `hero-bg-slide ${i === 1 ? 'active' : ''}`;
+      slide.className = `hero-bg-slide ${index === 0 ? 'active' : ''}`;
       const img = document.createElement('img');
-      img.src = `${i}.jpeg`;
+      img.src = `${imageNumber}.jpeg`;
       img.onerror = function () { };
       slide.appendChild(img);
       heroBg.appendChild(slide);
-    }
+    });
 
     setInterval(() => {
       const slides = document.querySelectorAll('.hero-bg-slide');
