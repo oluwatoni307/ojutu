@@ -101,17 +101,10 @@
       .nav-logo {
         font-family: "Amelyan", "Shrikhand", cursive;
         font-size: 34px;
-        color: var(--text-primary);
+        color: var(--primary-color);
         text-decoration: none;
         letter-spacing: 0.02em;
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          var(--primary-color) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .nav-logo:hover {
@@ -157,7 +150,7 @@
       }
 
       /* --- 3. MOBILE MENU --- */
-      @media (max-width: 968px) {
+      @media (max-width: 768px) {
         .nav-toggle {
           display: flex;
         }
@@ -223,13 +216,6 @@
         background: #000;
       }
 
-      @media (min-width: 969px) {
-        .hero-bg {
-          top: -15%;
-          height: 115%;
-        }
-      }
-
       .hero-bg-slide {
         position: absolute;
         width: 100%;
@@ -247,12 +233,6 @@
         height: 100%;
         object-fit: cover;
         object-position: center top;
-      }
-
-      @media (min-width: 969px) {
-        .hero-bg-slide img {
-          object-position: center center;
-        }
       }
 
       .hero::after {
@@ -462,6 +442,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center top;
         display: block;
       }
 
@@ -654,7 +635,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center 18%;
+        object-position: center 10%;
         display: block;
       }
 
@@ -747,6 +728,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center top;
         transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
@@ -1606,7 +1588,7 @@
           const heroHeight = hero.offsetHeight;
           const heroProgress = Math.min(Math.max(scrollY / heroHeight, 0), 1);
 
-          if (heroBg && window.innerWidth > 968) {
+          if (heroBg && window.innerWidth > 768) {
             heroBg.style.transform = `translateY(${heroProgress * 15}%)`;
           } else if (heroBg) {
             heroBg.style.transform = "none";
